@@ -10,6 +10,7 @@ services:
     name: playto-payout-redis
     plan: free
     region: ohio # Change if necessary
+    ipAllowList: [] # Required by Render, empty list means only internal Render resources can connect
 
   # Backend Web Service (Django + Celery using Honcho)
   - type: web
@@ -47,7 +48,6 @@ services:
   - type: web
     name: playto-payout-frontend
     env: static
-    region: ohio # Change if necessary
     plan: free
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
