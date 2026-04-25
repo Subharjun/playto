@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+# Change to the directory where the script is located
+cd "$(dirname "$0")"
+
 echo "Installing dependencies..."
 pip install -r requirements.txt
 

@@ -36,4 +36,6 @@ export const createPayout = (data, idempotencyKey) =>
 
 export const getLedger = () => api.get('/api/v1/ledger/')
 
+export const simulatePayment = (amount) => api.post('/api/v1/merchants/simulate-payment/', { amount })
+
 export default api

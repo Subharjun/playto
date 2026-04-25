@@ -28,5 +28,13 @@ class Merchant(models.Model):
     class Meta:
         db_table = "merchants"
 
+    def get_available_balance(self):
+        from ledger.queries import get_merchant_balance
+        return get_merchant_balance(self)["available"]
+
+    def get_held_balance(self):
+        from ledger.queries import get_merchant_balance
+        return get_merchant_balance(self)["held"]
+
     def __str__(self):
         return f"{self.name} ({self.email})"

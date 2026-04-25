@@ -8,6 +8,7 @@ from rest_framework import status
 from django.db import transaction
 from .models import Merchant
 from .serializers import MerchantSerializer
+from ledger.models import LedgerEntry, EntryType
 
 
 class SignupView(APIView):
@@ -109,3 +110,47 @@ class MerchantMeView(APIView):
         merchant = request.user.merchant
         serializer = MerchantSerializer(merchant)
         return Response(serializer.data)
+
+
+class SimulatePaymentView(APIView):
+    """
+    POST /api/v1/merchants/simulate-payment/
+    
+    A helper endpoint for testing to simulate an incoming customer payment.
+    Adds a CREDIT entry to the merchant's ledger.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        amount_inr = request.data.get("amount")
+        if amount_inr is None:
+            return Response(
+                {"error": "Amount is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        try:
+            amount_inr = float(amount_inr)
+            if amount_inr <= 0:
+                raise ValueError
+        except ValueError:
+            return Response(
+                {"error": "Amount must be a positive number."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        amount_paise = int(amount_inr * 100)
+        merchant = request.user.merchant
+
+        with transaction.atomic():
+            LedgerEntry.objects.create(
+                merchant=merchant,
+                amount_paise=amount_paise,
+                entry_type=EntryType.CREDIT,
+                description=f"Simulated Incoming Payment (₹{amount_inr:,.2f})"
+            )
+
+        return Response({
+            "message": f"Successfully credited ₹{amount_inr:,.2f} to your account.",
+            "new_balance_paise": merchant.get_available_balance() # Assuming this method exists or I'll use the aggregate logic
+        }, status=status.HTTP_201_CREATED)
