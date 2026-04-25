@@ -45,7 +45,7 @@ services:
         value: "*" # Or set to your render URL once known
 
   # Frontend Static Site (React/Vite)
-  - type: static
+  - type: static_site
     name: playto-payout-frontend
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
