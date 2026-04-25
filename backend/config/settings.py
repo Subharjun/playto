@@ -99,16 +99,13 @@ REST_FRAMEWORK = {
     ],
 }
 
-# --- CORS (allow React dev server) ---
+# --- CORS ---
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-]
-CORS_ALLOW_CREDENTIALS = True
-# In production, restrict this. For deployment URLs, also allow the deployed frontend.
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.render\.com$",
-    r"^https://.*\.railway\.app$",
+    "https://playto-payout-frontend.onrender.com",
 ]
 
 # --- Celery ---
