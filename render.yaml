@@ -19,7 +19,7 @@ services:
     region: ohio # Change if necessary
     plan: free
     buildCommand: "./backend/build.sh"
-    startCommand: "cd backend && honcho start"
+    startCommand: "cd backend && ./start.sh"
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
