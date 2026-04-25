@@ -6,6 +6,7 @@ set -o errexit
 cd "$(dirname "$0")"
 
 echo "Installing dependencies..."
+pip install --upgrade pip setuptools
 pip install -r requirements.txt
 
 echo "Collecting static files..."
